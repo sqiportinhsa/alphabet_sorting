@@ -8,7 +8,7 @@ int main() {
     stat("onegin.txt", &a);
     size_t amount_of_symbols = a.st_size;
 
-    char onegin[amount_of_symbols] = {};
+    char onegin[amount_of_symbols + 1] = {};
 
     FILE *input = fopen("onegin.txt", "r");
 
@@ -18,48 +18,52 @@ int main() {
     for (size_t i = 0; i < amount_of_symbols && (c = getc(input)) != EOF; ++i) {
         onegin[i] = (char) c;
         if (onegin[i] == '\n') {
-            ++c;
+            ++amount_of_strings;
+            //printf("%c", onegin[i-1]); print the last symbol of string
         }
     }
 
-    printf("%d\n", amount_of_strings);
+    onegin[amount_of_symbols] = '\n';
+    ++amount_of_strings;
+
+    for (size_t i = 0; i <= amount_of_symbols; ++i) {
+        printf("<%c>", onegin[i]);
+    }
+
+    //printf("<%c>", onegin[amount_of_symbols - 23]);
+
+    //printf("%d\n", amount_of_strings);
 
     fclose(input);
 
-    for (int i = 0; i <101; ++i) {
-        printf("%c", onegin[i]);
-    }
-
-    char *pointers_to_strings[amount_of_strings] = {};
+    char *pointers_to_strings[amount_of_strings + 1] = {};
     int n_string = 0;
 
-    //printf("%hhn", pointers_to_strings[1]);
-    //printf("%hhn", pointers_to_strings[2]);
-
     for (size_t n_sym = 0; n_sym < amount_of_symbols; ++n_sym) {
-        printf(".");
+        //printf("%c", onegin[n_sym]);
         if (onegin[n_sym] == '\n') {
-            pointers_to_strings[n_string] = &(onegin[n_sym]);
             ++n_string;
-            printf("\n");
+            pointers_to_strings[n_string] = &(onegin[n_sym + 1]);
+            printf("%d ", n_string);
         }
     }
-
-    //printf("<%c>", pointers_to_strings[1][0]);
-
-    bubble_sort(pointers_to_strings, amount_of_strings);
 
     FILE *output = fopen("sorted_onegin.txt", "w");
 
     for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
-        size_t len_of_str = strlen(pointers_to_strings[n_str]);
-
-        for (size_t i = 0; i < len_of_str; ++i) {
+        for (int i = 0; pointers_to_strings[n_str][i] != '\n'; ++i) {
             putc(pointers_to_strings[n_str][i], output);
         }
+        putc('\n', output);
+
+        print_string(pointers_to_strings[n_str]);
     }
 
     fclose(output);
+
+    //printf("<%c>", pointers_to_strings[0][0]);
+
+    bubble_sort(pointers_to_strings, amount_of_strings);
 
     return 0;
 }

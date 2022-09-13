@@ -1,6 +1,7 @@
 #include "sorting.h"
 
 #include <string.h>
+#include <stdio.h>
 
 void bubble_sort(char *pointers[], int amount_of_strings) {
     int n_sorting_pointer = 1;
@@ -27,9 +28,9 @@ void swap_pointers(char *p1, char *p2) {
 }
 
 bool strings_are_in_correct_order(char *p_to_s1, char *p_to_s2) {
-    size_t len1 = strlen(p_to_s1) - 1;
-    size_t len2 = strlen(p_to_s2) - 1;
-    size_t num_of_comp_elem = 0;
+    int len1 = len_of_str(p_to_s1) - 1;
+    int len2 = len_of_str(p_to_s2) - 1;
+    int num_of_comp_elem = 0;
 
     while (num_of_comp_elem < len1 && num_of_comp_elem < len2) {
         char elem_of_s1 = p_to_s1[num_of_comp_elem];
@@ -51,4 +52,17 @@ bool strings_are_in_correct_order(char *p_to_s1, char *p_to_s2) {
     }
 
     return true;
+}
+
+int len_of_str(char *str) {
+    int i = 0;
+    for (; str[i] != '\n'; ++i);
+    return i + 1;
+}
+
+void print_string(char *string) {
+    for (int i = 0; string[i] != '\n'; ++i) {
+        printf("%c", string[i]);
+    }
+    printf("\n");
 }
