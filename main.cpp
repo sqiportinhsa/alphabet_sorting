@@ -31,13 +31,13 @@ int main() {
     char *pointers_to_strings[amount_of_strings + 1] = {};
     place_pointers(text, pointers_to_strings, amount_of_symbols);
 
-    merge_sort(pointers_to_strings, amount_of_strings, sizeof(char*), compare_strings);
+    merge_sort((void**) pointers_to_strings, amount_of_strings, 1, compare_strings);
 
     FILE *output = fopen("sorted_onegin.txt", "w");
 
     for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
         for (int i = 0; pointers_to_strings[n_str][i] != '\n'; ++i) {
-            printf("<%c>", pointers_to_strings[n_str][i]);
+            //printf("<%c>", pointers_to_strings[n_str][i]);
             putc(pointers_to_strings[n_str][i], output);
         }
         putc('\n', output);

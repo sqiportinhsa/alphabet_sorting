@@ -24,9 +24,10 @@ void bubble_sort(char *pointers[], int amount_of_strings) {
     }
 }
 
-void merge_sort(char *arr[], size_t num_of_elem, size_t el_size, 
-                int (*compare) (char *, char *)) {
-    printf("Array before sorting: ");
+void merge_sort(void *array[], size_t num_of_elem, size_t el_size, 
+                int (*compare) (void *, void *)) {
+    char **arr = (char**) array;
+    printf("Array before sorting:          ");
     print_array(arr, num_of_elem);
 
 
@@ -37,10 +38,10 @@ void merge_sort(char *arr[], size_t num_of_elem, size_t el_size,
 
     if (num_of_elem == 2) {
         if (compare(*arr, *(arr + el_size)) < 0) {
-            printf("compatation done sucsessfull");
+            //printf("compatation done sucsessfull");
             swap_pointers(*arr, *(arr+el_size));
         }
-        printf("Array after sorting: ");
+        printf("Array after  sorting:          ");
         print_array(arr, num_of_elem);
         return;
     }
@@ -51,8 +52,8 @@ void merge_sort(char *arr[], size_t num_of_elem, size_t el_size,
     char** p_to_sub_1 = arr;
     char** p_to_sub_2 = arr + num_of_elem_if_sub_1*el_size;
 
-    merge_sort(p_to_sub_1, num_of_elem_if_sub_1, el_size, compare);
-    merge_sort(p_to_sub_2, num_of_elem_if_sub_2, el_size, compare);
+    merge_sort((void**) p_to_sub_1, num_of_elem_if_sub_1, el_size, compare);
+    merge_sort((void**) p_to_sub_2, num_of_elem_if_sub_2, el_size, compare);
 
     printf("Array after sorting subarrays: ");
     print_array(arr, num_of_elem);
@@ -95,8 +96,9 @@ void merge_sort(char *arr[], size_t num_of_elem, size_t el_size,
         ++elem_in_arr;
     }
 
-    printf("Array after sorting: ");
+    printf("Array after  sorting:          ");
     print_array(arr, num_of_elem);
+    printf("//----------------------------------------//\n");
 }
 
 void swap_pointers(char *p1, char *p2) {
@@ -105,7 +107,10 @@ void swap_pointers(char *p1, char *p2) {
     p2 = temp;
 }
 
-int compare_strings(char *p_to_s1, char *p_to_s2) {
+int compare_strings(void *ptr_to_s1, void *ptr_to_s2) {
+    char *p_to_s1 = (char *) ptr_to_s1;
+    char *p_to_s2 = (char *) ptr_to_s2;
+
     assert(p_to_s1 != nullptr);
     assert(p_to_s2 != nullptr);
 
@@ -115,27 +120,27 @@ int compare_strings(char *p_to_s1, char *p_to_s2) {
     int num_of_comp_elem_1 = 0;
     int num_of_comp_elem_2 = 0;
 
-    printf("comparison started\n");
+    //printf("comparison started\n");
 
     while (num_of_comp_elem_1 < len1 && num_of_comp_elem_2 < len2) {
         char elem_of_s1 = 0;
         char elem_of_s2 = 0;
 
-        printf("initialise elements: <%c> <%c>\n", elem_of_s1, elem_of_s2);
+        //printf("initialise elements: <%c> <%c>\n", elem_of_s1, elem_of_s2);
 
         do {
             elem_of_s1 = p_to_s1[num_of_comp_elem_1];
             ++num_of_comp_elem_1;
         } while (elem_of_s1 <= '!' && elem_of_s2 >= '?' && num_of_comp_elem_1 < len1);
 
-        printf("element 1 after skipping ancilary elements: %c\n", elem_of_s1);
+        //printf("element 1 after skipping ancilary elements: %c\n", elem_of_s1);
 
         do {
             elem_of_s2 = p_to_s1[num_of_comp_elem_2];
             ++num_of_comp_elem_2;
         } while (elem_of_s1 <= '!' && elem_of_s2 >= '?' && num_of_comp_elem_2 < len2);
 
-        printf("element 2 after skipping ancilary elements: %c\n", elem_of_s2);
+        //printf("element 2 after skipping ancilary elements: %c\n", elem_of_s2);
 
         if (elem_of_s1 > elem_of_s2) {
             return 1;
@@ -145,7 +150,7 @@ int compare_strings(char *p_to_s1, char *p_to_s2) {
             return -1;
         }
 
-        printf("elements are simular, comparing next:\n");
+        //printf("elements are simular, comparing next:\n");
     }
 
     if (len2 < len1) {
