@@ -107,7 +107,7 @@ void swap_pointers(char *p1, char *p2) {
 
 int compare_strings(char *p_to_s1, char *p_to_s2) {
     assert(p_to_s1 != nullptr);
-    assert(p_to_s2 == nullptr);
+    assert(p_to_s2 != nullptr);
 
     int len1 = len_of_str(p_to_s1) - 1;
     int len2 = len_of_str(p_to_s2) - 1;
