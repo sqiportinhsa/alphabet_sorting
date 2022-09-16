@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <cassert>
 
 void bubble_sort(char *pointers[], int amount_of_strings) {
     int n_sorting_pointer = 1;
@@ -30,12 +31,13 @@ void merge_sort(char *arr[], size_t num_of_elem, size_t el_size,
 
 
     if (num_of_elem == 1) {
-        printf("One element sorted");
+        printf("One element sorted\n");
         return;
     }
 
     if (num_of_elem == 2) {
-        if (compare(*arr, *(arr+el_size)) < 0) {
+        if (compare(*arr, *(arr + el_size)) < 0) {
+            printf("compatation done sucsessfull");
             swap_pointers(*arr, *(arr+el_size));
         }
         printf("Array after sorting: ");
@@ -104,25 +106,36 @@ void swap_pointers(char *p1, char *p2) {
 }
 
 int compare_strings(char *p_to_s1, char *p_to_s2) {
+    assert(p_to_s1 != nullptr);
+    assert(p_to_s2 == nullptr);
+
     int len1 = len_of_str(p_to_s1) - 1;
     int len2 = len_of_str(p_to_s2) - 1;
 
     int num_of_comp_elem_1 = 0;
     int num_of_comp_elem_2 = 0;
 
+    printf("comparison started\n");
+
     while (num_of_comp_elem_1 < len1 && num_of_comp_elem_2 < len2) {
         char elem_of_s1 = 0;
         char elem_of_s2 = 0;
+
+        printf("initialise elements: <%c> <%c>\n", elem_of_s1, elem_of_s2);
 
         do {
             elem_of_s1 = p_to_s1[num_of_comp_elem_1];
             ++num_of_comp_elem_1;
         } while (elem_of_s1 <= '!' && elem_of_s2 >= '?' && num_of_comp_elem_1 < len1);
 
+        printf("element 1 after skipping ancilary elements: %c\n", elem_of_s1);
+
         do {
             elem_of_s2 = p_to_s1[num_of_comp_elem_2];
             ++num_of_comp_elem_2;
         } while (elem_of_s1 <= '!' && elem_of_s2 >= '?' && num_of_comp_elem_2 < len2);
+
+        printf("element 2 after skipping ancilary elements: %c\n", elem_of_s2);
 
         if (elem_of_s1 > elem_of_s2) {
             return 1;
@@ -132,16 +145,18 @@ int compare_strings(char *p_to_s1, char *p_to_s2) {
             return -1;
         }
 
-        if (elem_of_s1 == elem_of_s2) {
-            return 0;
-        }
+        printf("elements are simular, comparing next:\n");
     }
 
     if (len2 < len1) {
         return -1;
     }
 
-    return 1;
+    if (len1 < len2) {
+        return  1;
+    }
+
+    return 0;
 }
 
 int len_of_str(char *str) {
@@ -184,5 +199,5 @@ void print_array(char *arr[], size_t num_of_elem) {
         printf("%c%c%c, ", arr[i][0], arr[i][1], arr[i][2]);
     }
     printf("%c%c%c", arr[num_of_elem - 1][0], arr[num_of_elem - 1][1], arr[num_of_elem - 1][2]);
-    printf("}");
+    printf("}\n");
 }

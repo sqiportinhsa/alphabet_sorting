@@ -31,7 +31,7 @@ int main() {
     char *pointers_to_strings[amount_of_strings + 1] = {};
     place_pointers(text, pointers_to_strings, amount_of_symbols);
 
-    merge_sort(pointers_to_strings, amount_of_strings, __CHAR_BIT__, compare_strings);
+    merge_sort(pointers_to_strings, amount_of_strings, sizeof(char*), compare_strings);
 
     FILE *output = fopen("sorted_onegin.txt", "w");
 
