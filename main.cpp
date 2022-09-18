@@ -28,6 +28,10 @@ int main() {
 
     fclose(input);
 
+    char test_str[] = "fha\ncab\n";
+    char *test_ptr[2] = {&test_str[0], &test_str[3]};
+    printf("%d\n", compare_strings(test_ptr[0], test_ptr[1]));
+
     char *pointers_to_strings[amount_of_strings + 1] = {};
     place_pointers(text, pointers_to_strings, amount_of_symbols);
 
