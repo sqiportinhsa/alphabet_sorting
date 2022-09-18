@@ -4,11 +4,14 @@ CPPFLAGS = -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-e
 .PHONY: all
 all: $(TARGET)
 
-$(TARGET): bin\main.o bin\sorting.o
-	g++ bin\main.o bin\sorting.o -o $(TARGET) $(CPPFLAGS)
+$(TARGET): bin\main.o bin\sorting.o bin\interface.o
+	g++ bin\main.o bin\sorting.o bin\interface.o -o $(TARGET) $(CPPFLAGS)
 
 bin\main.o: main.cpp
 	g++ -c main.cpp -o bin\main.o $(CPPFLAGS)
 
 bin\sorting.o: sorting.cpp sorting.h
 	g++ -c sorting.cpp -o bin\sorting.o $(CPPFLAGS)
+
+bin\interface.o: interface.cpp interface.h
+	g++ -c interface.cpp -o bin\interface.o $(CPPFLAGS)

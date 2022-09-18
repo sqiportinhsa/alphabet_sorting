@@ -1,16 +1,32 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include "sorting.h"
+#include "interface.h"
 
 
-int main() {
+int main(int argc, const char **argv) {
+    char  input_name[50] = {};
+    char output_name[50] = {};
+
+    int corr = get_file_names(argc, argv, input_name, output_name);
+
+    if (corr < 0) {
+        printf("incorrect input: length of file names should be less than 50");
+        return -1;
+    }
+    
+    if (corr > 0) {
+        printf("incorrect input: expected names of input and output files or \"-d\" for default");
+        return - 1;
+    }
+
     struct stat a = {};
-    stat("onegin.txt", &a);
+    stat(input_name, &a);
     size_t amount_of_symbols = a.st_size;
 
     char text[amount_of_symbols + 1] = {};
 
-    FILE *input = fopen("onegin.txt", "r");
+    FILE *input = fopen(input_name, "r");
 
     int amount_of_strings = 0;
 
@@ -37,35 +53,13 @@ int main() {
     merge_sort((void**) sort_from_beg_ptrs, amount_of_strings, 1, compare_strings);
     merge_sort((void**) sort_from_end_ptrs, amount_of_strings, 1, reversed_comparator);
 
-    FILE *output = fopen("sorted_onegin.txt", "w");
+    FILE *output = fopen(output_name, "w");
 
     fputs("File sorted in alphabet order:\n\n", output);
-
-    for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
-        if (sort_from_beg_ptrs[n_str][0] == '\n') {
-            continue;
-        }
-
-        for (int i = 0; sort_from_beg_ptrs[n_str][i] != '\n'; ++i) {
-            //printf("<%c>", sort_from_beg_ptrs[n_str][i]);
-            putc(sort_from_beg_ptrs[n_str][i], output);
-        }
-        putc('\n', output);
-    }
+    write_text(output, sort_from_beg_ptrs, amount_of_strings);
 
     fputs("\n\nFile sorted in alphabet order by last letters:\n\n", output);
-
-    for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
-        if (sort_from_end_ptrs[n_str][0] == '\n') {
-            continue;
-        }
-
-        for (int i = 0; sort_from_end_ptrs[n_str][i] != '\n'; ++i) {
-            //printf("<%c>", sort_from_beg_ptrs[n_str][i]);
-            putc(sort_from_end_ptrs[n_str][i], output);
-        }
-        putc('\n', output);
-    }
+    write_text(output, sort_from_end_ptrs, amount_of_strings);
 
     fputs("\n\nOriginal text:\n\n", output);
 
