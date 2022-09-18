@@ -117,8 +117,8 @@ int compare_strings(void *ptr_to_s1, void *ptr_to_s2) {
 
     //printf("Compairing strings:\n");
 
-    print_string(p_to_s1);
-    print_string(p_to_s2);
+    //print_string(p_to_s1);
+    //print_string(p_to_s2);
 
     int len1 = len_of_str(p_to_s1) - 1;
     int len2 = len_of_str(p_to_s2) - 1;
