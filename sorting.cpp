@@ -27,12 +27,12 @@ void bubble_sort(char *pointers[], int amount_of_strings) {
 void merge_sort(void *array[], size_t num_of_elem, size_t el_size, 
                 int (*compare) (void *, void *)) {
     char **arr = (char**) array;
-    printf("Array before sorting:          ");
-    print_array(arr, num_of_elem);
+    //printf("Array before sorting:          ");
+    //print_array(arr, num_of_elem);
 
 
     if (num_of_elem == 1) {
-        printf("One element sorted\n");
+        //printf("One element sorted\n");
         return;
     }
 
@@ -41,8 +41,8 @@ void merge_sort(void *array[], size_t num_of_elem, size_t el_size,
             //printf("compatation done sucsessfull");
             swap_pointers(arr, (arr+el_size));
         }
-        printf("Array after  sorting:          ");
-        print_array(arr, num_of_elem);
+        //printf("Array after  sorting:          ");
+        //print_array(arr, num_of_elem);
         return;
     }
 
@@ -55,50 +55,66 @@ void merge_sort(void *array[], size_t num_of_elem, size_t el_size,
     merge_sort((void**) p_to_sub_1, num_of_elem_if_sub_1, el_size, compare);
     merge_sort((void**) p_to_sub_2, num_of_elem_if_sub_2, el_size, compare);
 
-    printf("Array after sorting subarrays: ");
-    print_array(arr, num_of_elem);
+    //printf("Array after sorting subarrays: ");
+    //print_array(arr, num_of_elem);
 
-    char *temp[num_of_elem] = {};
+    char *temp[num_of_elem * el_size] = {};
     copy_arr(arr, temp, num_of_elem);
 
     size_t elem_in_sub_1 = 0;
     size_t elem_in_sub_2 = 0;
 
-    size_t elem_in_arr = 0;
+    size_t elem_in_temp = 0;
 
     while (elem_in_sub_1 < num_of_elem_if_sub_1 &&
            elem_in_sub_2 < num_of_elem_if_sub_2) {
+        //printf("least string in sub1 is string number %lld: ", elem_in_sub_1);
+        //print_string(*(p_to_sub_1 + elem_in_sub_1*el_size));
+        //printf("least string in sub2 is string number %lld: ", elem_in_sub_2);
+        //print_string(*(p_to_sub_2 + elem_in_sub_2*el_size));
+
         if (compare(*(p_to_sub_1 + elem_in_sub_1*el_size),
                     *(p_to_sub_2 + elem_in_sub_2*el_size)) > 0) {
-            *(arr + elem_in_arr*el_size) = *(arr + elem_in_sub_1*el_size);
+            //printf("least of them is: ");
+            //print_string(*(p_to_sub_1 + elem_in_sub_1*el_size));
+            *(temp + elem_in_temp*el_size) = *(p_to_sub_1 + elem_in_sub_1*el_size);
 
             ++elem_in_sub_1;
-            ++elem_in_arr;
+            ++elem_in_temp;
         } else {
-            *(arr + elem_in_arr*el_size) = *(arr + elem_in_sub_2*el_size);
+            //printf("least of them is: ");
+            //print_string(*(p_to_sub_2 + elem_in_sub_2*el_size));
+            *(temp + elem_in_temp*el_size) = *(p_to_sub_2 + elem_in_sub_2*el_size);
 
             ++elem_in_sub_2;
-            ++elem_in_arr;
+            ++elem_in_temp;
         }
+
+        //printf("Array after adding element: ");
+        //print_array(temp, elem_in_temp + 1);
     }
 
     while (elem_in_sub_1 < num_of_elem_if_sub_1) {
-        *(arr + elem_in_arr*el_size) = *(arr + elem_in_sub_1*el_size);
+        *(temp + elem_in_temp*el_size) = *(p_to_sub_1 + elem_in_sub_1*el_size);
 
         ++elem_in_sub_1;
-        ++elem_in_arr;
+        ++elem_in_temp;
     }
 
     while (elem_in_sub_2 < num_of_elem_if_sub_2) {
-        *(arr + elem_in_arr*el_size) = *(arr + elem_in_sub_2*el_size);
+        *(temp + elem_in_temp*el_size) = *(p_to_sub_2 + elem_in_sub_2*el_size);
 
         ++elem_in_sub_2;
-        ++elem_in_arr;
+        ++elem_in_temp;
     }
 
-    printf("Array after  sorting:          ");
-    print_array(arr, num_of_elem);
-    printf("//----------------------------------------//\n");
+    //printf("Sorted array:               ");
+    //print_array(temp, num_of_elem);
+    //printf("//----------------------------------------//\n");
+
+    copy_arr(temp, arr, num_of_elem);
+    //printf("Array after sorting:        ");
+    //print_array(arr, num_of_elem);
 }
 
 void swap_pointers(char **p1, char **p2) {
