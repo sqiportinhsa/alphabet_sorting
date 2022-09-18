@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <cassert>
+#include <cctype>
 
 void bubble_sort(char *pointers[], int amount_of_strings) {
     int n_sorting_pointer = 1;
@@ -147,6 +148,12 @@ int compare_strings(void *ptr_to_s1, void *ptr_to_s2) {
     while (num_of_comp_elem_1 < len1 && num_of_comp_elem_2 < len2) {
         char elem_of_s1 = next_letter_sym(p_to_s1, &num_of_comp_elem_1, len1);
         char elem_of_s2 = next_letter_sym(p_to_s2, &num_of_comp_elem_2, len2);
+
+        /*if (abs(elem_of_s1 - elem_of_s2) == 'a' - 'A') {
+            ++num_of_comp_elem_1;
+            ++num_of_comp_elem_2;
+            continue;
+        } */
     
         //printf("element 1: %c\n", elem_of_s1);
         //printf("element 2: %c\n", elem_of_s2);
@@ -174,6 +181,63 @@ int compare_strings(void *ptr_to_s1, void *ptr_to_s2) {
 
     if (len1 < len2) {
         //printf("1\n");
+        return  1;
+    }
+
+    //printf("0");
+    return 0;
+}
+
+int reversed_comparator(void *ptr_to_s1, void *ptr_to_s2) {
+    char *p_to_s1 = (char *) ptr_to_s1;
+    char *p_to_s2 = (char *) ptr_to_s2;
+
+    assert(p_to_s1 != nullptr);
+    assert(p_to_s2 != nullptr);
+
+    //printf("Compairing strings:\n");
+
+    //print_string(p_to_s1);
+    //print_string(p_to_s2);
+
+    int len1 = len_of_str(p_to_s1);
+    int len2 = len_of_str(p_to_s2);
+
+    int num_of_comp_elem_1 = len1 - 1;
+    int num_of_comp_elem_2 = len2 - 1;
+
+    //printf("comparison started");
+
+    while (num_of_comp_elem_1 >= 0 && num_of_comp_elem_2 >= 0) {
+        char elem_of_s1 = prev_letter_sym(p_to_s1, &num_of_comp_elem_1);
+        char elem_of_s2 = prev_letter_sym(p_to_s2, &num_of_comp_elem_2);
+
+        //printf("element 1 with number %d: %c\n", num_of_comp_elem_1, elem_of_s1);
+        //printf("element 2 with number %d: %c\n", num_of_comp_elem_2, elem_of_s2);
+
+        if (elem_of_s1 > elem_of_s2) {
+            //printf("-1\n");
+            return -1;
+        }
+        
+        if (elem_of_s1 < elem_of_s2) {
+            //printf("1\n");
+            return 1;
+        }
+
+        //printf("elements are simular, comparing next:\n");
+
+        --num_of_comp_elem_1;
+        --num_of_comp_elem_2;
+    }
+
+    if (len2 < len1) {
+        //printf("-1");
+        return -1;
+    }
+
+    if (len1 < len2) {
+        //printf("1");
         return  1;
     }
 
@@ -227,7 +291,7 @@ void print_array(char *arr[], size_t num_of_elem) {
 char next_letter_sym(const char str[], int* p_to_num_of_sym, int len) {
     char sym = str[*p_to_num_of_sym];
     
-    while (!is_letter(sym) && *p_to_num_of_sym < len - 1) {
+    while (isalpha(sym) == 0 && *p_to_num_of_sym < len - 1) {
         ++(*p_to_num_of_sym);
         sym = str[*p_to_num_of_sym];
     }
@@ -235,6 +299,13 @@ char next_letter_sym(const char str[], int* p_to_num_of_sym, int len) {
     return(sym);
 }
 
-bool is_letter(char sym) {
-    return ((sym >= 'A' && sym <= 'Z') || (sym >= 'a' && sym <= 'z'));
+char prev_letter_sym(const char str[], int* p_to_num_of_sym) {
+    char sym = str[*p_to_num_of_sym];
+    
+    while (isalpha(sym) == 0 && *p_to_num_of_sym > 0) {
+        --(*p_to_num_of_sym);
+        sym = str[*p_to_num_of_sym];
+    }
+
+    return(sym);
 }
