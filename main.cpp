@@ -28,22 +28,54 @@ int main() {
 
     fclose(input);
 
-    char *pointers_to_strings[amount_of_strings + 1] = {};
-    place_pointers(text, pointers_to_strings, amount_of_symbols);
+    char *sort_from_beg_ptrs[amount_of_strings + 1] = {};
+    place_pointers(text, sort_from_beg_ptrs, amount_of_symbols);
 
-    merge_sort((void**) pointers_to_strings, amount_of_strings, 1, compare_strings);
+    char *sort_from_end_ptrs[amount_of_strings + 1] = {};
+    place_pointers(text, sort_from_end_ptrs, amount_of_symbols);
+
+    merge_sort((void**) sort_from_beg_ptrs, amount_of_strings, 1, compare_strings);
+    merge_sort((void**) sort_from_end_ptrs, amount_of_strings, 1, reversed_comparator);
 
     FILE *output = fopen("sorted_onegin.txt", "w");
 
+    fputs("File sorted in alphabet order:\n\n", output);
+
     for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
-        for (int i = 0; pointers_to_strings[n_str][i] != '\n'; ++i) {
-            //printf("<%c>", pointers_to_strings[n_str][i]);
-            putc(pointers_to_strings[n_str][i], output);
+        if (sort_from_beg_ptrs[n_str][0] == '\n') {
+            continue;
+        }
+
+        for (int i = 0; sort_from_beg_ptrs[n_str][i] != '\n'; ++i) {
+            //printf("<%c>", sort_from_beg_ptrs[n_str][i]);
+            putc(sort_from_beg_ptrs[n_str][i], output);
         }
         putc('\n', output);
     }
 
+    fputs("\n\nFile sorted in alphabet order by last letters:\n\n", output);
+
+    for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
+        if (sort_from_end_ptrs[n_str][0] == '\n') {
+            continue;
+        }
+
+        for (int i = 0; sort_from_end_ptrs[n_str][i] != '\n'; ++i) {
+            //printf("<%c>", sort_from_beg_ptrs[n_str][i]);
+            putc(sort_from_end_ptrs[n_str][i], output);
+        }
+        putc('\n', output);
+    }
+
+    fputs("\n\nOriginal text:\n\n", output);
+
+    for (size_t i = 0; i < amount_of_symbols; ++i) {
+        putc(text[i], output);
+    }
+
     fclose(output);
+
+    printf("Sorting is done!\nThanks for using this sorter!\n");
 
     return 0;
 }
