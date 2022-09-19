@@ -7,11 +7,11 @@ all: $(TARGET)
 $(TARGET): bin\main.o bin\sorting.o bin\interface.o
 	g++ bin\main.o bin\sorting.o bin\interface.o -o $(TARGET) $(CPPFLAGS)
 
-bin\main.o: main.cpp
+bin\main.o: main.cpp common.h sorting.h interface.h
 	g++ -c main.cpp -o bin\main.o $(CPPFLAGS)
 
-bin\sorting.o: sorting.cpp sorting.h
+bin\sorting.o: sorting.cpp sorting.h common.h
 	g++ -c sorting.cpp -o bin\sorting.o $(CPPFLAGS)
 
-bin\interface.o: interface.cpp interface.h
+bin\interface.o: interface.cpp interface.h common.h
 	g++ -c interface.cpp -o bin\interface.o $(CPPFLAGS)

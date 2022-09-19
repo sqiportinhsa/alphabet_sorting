@@ -6,6 +6,7 @@
 #include <math.h>
 #include <cassert>
 #include <cctype>
+#include "common.h"
 
 void bubble_sort(char *pointers[], int amount_of_strings) {
     int n_sorting_pointer = 1;

@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
+#include "common.h"
 
 const char Default_file_flag[] = "-d";
 const char default_input[]  = "onegin.txt";
@@ -63,4 +65,10 @@ void write_text(FILE *output, char *text[], int amount_of_strings) {
 
         putc('\n', output);
     }
+}
+
+size_t elements_in_file(char file_name[]) {
+    struct stat a = {};
+    stat(file_name, &a);
+    return a.st_size;
 }

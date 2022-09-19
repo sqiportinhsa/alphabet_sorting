@@ -1,17 +1,17 @@
 #include <stdio.h>
-#include <sys/stat.h>
+#include <stdlib.h>
 #include "sorting.h"
 #include "interface.h"
-
+#include "common.h"
 
 int main(int argc, const char **argv) {
-    char  input_name[50] = {};
-    char output_name[50] = {};
+    char  input_name[max_len_of_filename] = {};
+    char output_name[max_len_of_filename] = {};
 
     int corr = get_file_names(argc, argv, input_name, output_name);
 
     if (corr < 0) {
-        printf("incorrect input: length of file names should be less than 50");
+        printf("incorrect input: length of file names should be less than %d", max_len_of_filename);
         return -1;
     }
     
@@ -20,11 +20,13 @@ int main(int argc, const char **argv) {
         return - 1;
     }
 
-    struct stat a = {};
-    stat(input_name, &a);
-    size_t amount_of_symbols = a.st_size;
+    size_t amount_of_symbols = elements_in_file(input_name);
 
-    char text[amount_of_symbols + 1] = {};
+    char *text = (char*) calloc(amount_of_symbols, sizeof(char));
+
+    if (text == nullptr) {
+        printf("input error: input file is too large");
+    }
 
     FILE *input = fopen(input_name, "r");
 
