@@ -265,21 +265,6 @@ void copy_arr(char* arr[], char* copy_of_arr[], size_t arr_len) {
     }
 }
 
-void place_pointers(char text[], char *pointers_to_strings[], size_t amount_of_symbols) {
-    int n_string = 0;
-    pointers_to_strings[0] = &text[0];
-
-    for (size_t n_sym = 0; n_sym < amount_of_symbols; ++n_sym) {
-        //printf("<%d>", text[n_sym]);
-        if (text[n_sym] == '\n') {
-            ++n_string;
-            pointers_to_strings[n_string] = &(text[n_sym + 1]);
-            //printf("%d ", n_string);
-            //printf("%d\n", pointers_to_strings[n_string]);
-        }
-    }
-}
-
 void print_array(char *arr[], size_t num_of_elem) {
     printf("{");
     for (size_t i = 0; i < num_of_elem - 1; i++) {

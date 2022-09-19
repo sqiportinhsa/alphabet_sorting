@@ -9,7 +9,6 @@ int reversed_comparator(void *ptr_to_s1, void *ptr_to_s2);
 int len_of_str(char *str);
 void print_string(char *string);
 void copy_arr(char* arr[], char* copy_of_arr[], size_t arr_len);
-void place_pointers(char text[], char *pointers_to_strings[], size_t amount_of_symbols);
 void print_array(char *arr[], size_t num_of_elem);
 char next_letter_sym(const char str[], int* p_to_num_of_sym, int len);
 char prev_letter_sym(const char str[], int* p_to_num_of_sym);

@@ -8,45 +8,42 @@ int main(int argc, const char **argv) {
     char  input_name[max_len_of_filename] = {};
     char output_name[max_len_of_filename] = {};
 
-    int corr = get_file_names(argc, argv, input_name, output_name);
-
-    if (corr < 0) {
-        printf("incorrect input: length of file names should be less than %d", max_len_of_filename);
+    if(get_file_names(argc, argv, input_name, output_name) != 0) {
         return -1;
-    }
-    
-    if (corr > 0) {
-        printf("incorrect input: expected names of input and output files or \"-d\" for default");
-        return - 1;
     }
 
     size_t amount_of_symbols = elements_in_file(input_name);
+    int    amount_of_strings = 0;
 
     char *text = (char*) calloc(amount_of_symbols, sizeof(char));
 
-    if (text == nullptr) {
+    /*if (text == nullptr) {
         printf("input error: input file is too large");
-    }
+    }*/
 
     FILE *input = fopen(input_name, "r");
 
-    int amount_of_strings = 0;
-
-    int c = '0';
-    for (size_t i = 0; i < amount_of_symbols && (c = getc(input)) != EOF; ++i) {
-        text[i] = (char) c;
-        if (text[i] == '\n') {
-            ++amount_of_strings;
-        }
-    }
-
-    amount_of_symbols -= amount_of_strings;
-    text[amount_of_symbols] = '\n';
-    ++amount_of_strings;
+    amount_of_symbols = read_text(text, amount_of_symbols, input);
+    amount_of_strings = count_strings(text, amount_of_symbols);
 
     fclose(input);
 
-    char *sort_from_beg_ptrs[amount_of_strings + 1] = {};
+    for (size_t i = 0; i < amount_of_symbols; ++i) {
+        printf("<%c>", text[i]);
+    }
+
+    struct String left__to_rigth_sorted[amount_of_strings] = {};
+    struct String right_to_left__sorted[amount_of_strings] = {};
+
+    place_pointers(left__to_rigth_sorted, text, amount_of_symbols, amount_of_strings);
+    place_pointers(right_to_left__sorted, text, amount_of_symbols, amount_of_strings);
+
+    /*for (int i = 0; i < amount_of_strings; ++i) {
+        printf("len of string num %d is %d, first element is <%c>\n", i,
+                left__to_rigth_sorted[i].len_of_str, *(left__to_rigth_sorted[i].ptr_to_start));
+    } */
+
+    /*char *sort_from_beg_ptrs[amount_of_strings + 1] = {};
     place_pointers(text, sort_from_beg_ptrs, amount_of_symbols);
 
     char *sort_from_end_ptrs[amount_of_strings + 1] = {};
@@ -71,7 +68,7 @@ int main(int argc, const char **argv) {
 
     fclose(output);
 
-    printf("Sorting is done!\nThanks for using this sorter!\n");
+    printf("Sorting is done!\nThanks for using this sorter!\n"); */
 
     return 0;
 }

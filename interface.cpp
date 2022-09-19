@@ -17,7 +17,9 @@ int get_file_names(int argc, const char *argv[], char input_file[], char output_
     }
 
     if (argc == 2) {
-        if (strlen(argv[1]) > 50) {
+        if (strlen(argv[1]) > max_len_of_filename) {
+            printf("incorrect input: length of file names should be less than %d", 
+                                                              max_len_of_filename);
             return -1;
         }
 
@@ -31,7 +33,11 @@ int get_file_names(int argc, const char *argv[], char input_file[], char output_
     }
 
     if (argc == 3) {
-        if (strlen(argv[1]) > 50 || strlen(argv[2]) > 50) {
+        if (strlen(argv[1]) > max_len_of_filename || 
+            strlen(argv[2]) > max_len_of_filename) {
+
+            printf("incorrect input: length of file names should be less than %d", 
+                                                              max_len_of_filename);
             return -1;
         }
 
@@ -50,6 +56,7 @@ int get_file_names(int argc, const char *argv[], char input_file[], char output_
         return 0;
     }
 
+    printf("incorrect input: expected names of input and output files or \"-d\" for default");
     return 1;
 }
 
@@ -71,4 +78,42 @@ size_t elements_in_file(char file_name[]) {
     struct stat a = {};
     stat(file_name, &a);
     return a.st_size;
+}
+
+int count_strings(char text[], size_t amount_of_symbols) {
+    int amount_of_strings = 0;
+    for (size_t i = 0; i < amount_of_symbols; ++i) {
+        if (text[i] == '\n') {
+            ++amount_of_strings;
+        }
+    }
+    return amount_of_strings;
+}
+
+size_t read_text(char text[], size_t amount_of_symbols, FILE *input) {
+    size_t nread = fread(text, sizeof(char), amount_of_symbols, input);
+
+    size_t real_amount_of_symbols = nread + 1;
+    text[real_amount_of_symbols - 1] = '\n';
+
+    return real_amount_of_symbols;
+}
+
+void place_pointers(struct String strings[], char *text, size_t amount_of_symbols, 
+                                                            int amount_of_strings) {
+    strings[0].ptr_to_start = &(text[0]);
+    int nstring = 0;
+    size_t nsym = 0;
+
+    for (; nstring < amount_of_strings - 1; ++nsym) {
+        if (text[nsym] == '\n') {
+            ++nstring;
+            strings[nstring].ptr_to_start = &(text[nsym + 1]);
+
+            strings[nstring - 1].len_of_str = (int) (strings[nstring - 0].ptr_to_start -
+                                                     strings[nstring - 1].ptr_to_start);
+        }
+    }
+
+    strings[amount_of_strings - 1].len_of_str = (int) (amount_of_symbols - nsym);
 }
