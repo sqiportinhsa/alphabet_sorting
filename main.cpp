@@ -49,8 +49,8 @@ int main(int argc, const char **argv) {
     char *sort_from_end_ptrs[amount_of_strings + 1] = {};
     place_pointers(text, sort_from_end_ptrs, amount_of_symbols);
 
-    merge_sort((void**) sort_from_beg_ptrs, amount_of_strings, 1, compare_strings);
-    merge_sort((void**) sort_from_end_ptrs, amount_of_strings, 1, reversed_comparator);
+    merge_sort((void**) sort_from_beg_ptrs, amount_of_strings, 1, compare_strings_ltor);
+    merge_sort((void**) sort_from_end_ptrs, amount_of_strings, 1, compare_strings_rtol);
 
     FILE *output = fopen(output_name, "w");
 
