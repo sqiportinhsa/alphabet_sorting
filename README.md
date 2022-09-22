@@ -1,5 +1,5 @@
-# alphabet_sorting
-This programm can sort strings from a file in alphabet order using merge sort algorithm.
+# alphabet sorting
+This programm can sort strings from a file in alphabet order using merge sort algorithm. Sorting function is compatible with qsort from stdlib in arguments. Also there are two comparators for sorting in right-to-left and left-to-right order.
 
 Input:  txt file with text (only english letters and ancillary symbols)
 
