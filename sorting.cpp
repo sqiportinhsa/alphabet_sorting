@@ -93,7 +93,7 @@ void merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (v
         }
 
         //printf("Array after adding element: ");
-        //print_array(temp, elem_in_temp + 1);
+        //print_strings(temp, elem_in_temp + 1);
     }
 
     while (elem_in_sub_1 < num_of_elem_if_sub_1) {
@@ -115,8 +115,9 @@ void merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (v
     //printf("//----------------------------------------//\n");
 
     copy_arr(temp, arr, num_of_elem, el_size);
+
     //printf("Array after sorting:        ");
-    //print_array(arr, num_of_elem);
+    //print_strings(arr, num_of_elem);
 }
 
 void swap_elements(void *p1, void *p2, size_t size_of_element) {
@@ -128,9 +129,9 @@ void swap_elements(void *p1, void *p2, size_t size_of_element) {
     char temp = 0;
 
     for (size_t i = 0; i < size_of_element; ++i) {
-        copy_arr( ptr1 + i, &temp, 1, 1);
-        copy_arr( ptr2 + i,  ptr1, 1, 1);
-        copy_arr(&temp + i,  ptr1, 1, 1);
+        temp        = *(ptr1 + i);
+        *(ptr1 + i) = *(ptr2 + i);
+        *(ptr2 + i) = temp;
     }
 }
 
@@ -256,9 +257,9 @@ int len_of_str(char *str) {
     return i + 1;
 }
 
-void copy_arr(void *array, void *copy_of_array, size_t arr_len, size_t elem_size) {
-    char         *arr = (char*)         array;
-    char *copy_of_arr = (char*) copy_of_array;
+void copy_arr(void *from, void *to, size_t arr_len, size_t elem_size) {
+    char         *arr = (char*) from;
+    char *copy_of_arr = (char*) to;
 
     for (size_t n_elem = 0; n_elem < arr_len; ++n_elem) {
         for (size_t i = 0; i < elem_size; ++i) {
