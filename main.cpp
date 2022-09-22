@@ -19,6 +19,7 @@ int main(int argc, const char **argv) {
 
     if (text == nullptr) {
         printf("input error: input file is too large");
+        return -1;
     }
 
     FILE *input = fopen(input_name, "r");
@@ -32,11 +33,17 @@ int main(int argc, const char **argv) {
         printf("<%c>", text[i]);
     }*/
 
-    struct String left__to_rigth_sorted[amount_of_strings] = {};
-    struct String right_to_left__sorted[amount_of_strings] = {};
+    struct String *left__to_rigth_sorted = (struct String*) calloc(amount_of_strings, sizeof(String));
+    struct String *right_to_left__sorted = (struct String*) calloc(amount_of_strings, sizeof(String));
+
+    if (right_to_left__sorted == nullptr || left__to_rigth_sorted == nullptr) {
+        printf("input error: input file is too large");
+        return -1;
+    }
 
     place_pointers(left__to_rigth_sorted, text, amount_of_symbols, amount_of_strings);
-    place_pointers(right_to_left__sorted, text, amount_of_symbols, amount_of_strings);
+
+    copy_arr(left__to_rigth_sorted, right_to_left__sorted, amount_of_strings, sizeof(String));
 
     /*for (int i = 0; i < amount_of_strings; ++i) {
         printf("len of string num %d is %d, first element is <%c>\n", i,
