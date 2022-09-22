@@ -17,9 +17,9 @@ int main(int argc, const char **argv) {
 
     char *text = (char*) calloc(amount_of_symbols, sizeof(char));
 
-    /*if (text == nullptr) {
+    if (text == nullptr) {
         printf("input error: input file is too large");
-    }*/
+    }
 
     FILE *input = fopen(input_name, "r");
 
@@ -28,9 +28,9 @@ int main(int argc, const char **argv) {
 
     fclose(input);
 
-    for (size_t i = 0; i < amount_of_symbols; ++i) {
+    /*for (size_t i = 0; i < amount_of_symbols; ++i) {
         printf("<%c>", text[i]);
-    }
+    }*/
 
     struct String left__to_rigth_sorted[amount_of_strings] = {};
     struct String right_to_left__sorted[amount_of_strings] = {};
@@ -40,35 +40,26 @@ int main(int argc, const char **argv) {
 
     /*for (int i = 0; i < amount_of_strings; ++i) {
         printf("len of string num %d is %d, first element is <%c>\n", i,
-                left__to_rigth_sorted[i].len_of_str, *(left__to_rigth_sorted[i].ptr_to_start));
-    } */
+                left__to_rigth_sorted[i].len, *(left__to_rigth_sorted[i].ptr));
+    }*/
 
-    /*char *sort_from_beg_ptrs[amount_of_strings + 1] = {};
-    place_pointers(text, sort_from_beg_ptrs, amount_of_symbols);
-
-    char *sort_from_end_ptrs[amount_of_strings + 1] = {};
-    place_pointers(text, sort_from_end_ptrs, amount_of_symbols);
-
-    merge_sort((void**) sort_from_beg_ptrs, amount_of_strings, 1, compare_strings_ltor);
-    merge_sort((void**) sort_from_end_ptrs, amount_of_strings, 1, compare_strings_rtol);
+    merge_sort(left__to_rigth_sorted, amount_of_strings, sizeof(String), compare_strings_ltor);
+    merge_sort(right_to_left__sorted, amount_of_strings, sizeof(String), compare_strings_rtol);
 
     FILE *output = fopen(output_name, "w");
 
-    fputs("File sorted in alphabet order:\n\n", output);
-    write_text(output, sort_from_beg_ptrs, amount_of_strings);
+    fputs("File sorted in alphabet order from left to right:\n\n", output);
+    write_text_by_strings(output, left__to_rigth_sorted, amount_of_strings);
 
-    fputs("\n\nFile sorted in alphabet order by last letters:\n\n", output);
-    write_text(output, sort_from_end_ptrs, amount_of_strings);
+    fputs("\n\nFile sorted in alphabet order from right to left:\n\n", output);
+    write_text_by_strings(output, right_to_left__sorted, amount_of_strings);
 
     fputs("\n\nOriginal text:\n\n", output);
-
-    for (size_t i = 0; i < amount_of_symbols; ++i) {
-        putc(text[i], output);
-    }
+    write_text_by_chars(output, text, amount_of_symbols);
 
     fclose(output);
 
-    printf("Sorting is done!\nThanks for using this sorter!\n"); */
+    printf("Sorting is done!\nThanks for using this sorter!\n");
 
     return 0;
 }

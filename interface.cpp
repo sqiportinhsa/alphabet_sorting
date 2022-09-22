@@ -60,24 +60,13 @@ int get_file_names(int argc, const char *argv[], char input_file[], char output_
     return 1;
 }
 
-void write_text(FILE *output, char *text[], int amount_of_strings) {
-    for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
-        if (text[n_str][0] == '\n') {
-            continue;
-        }
+size_t read_text(char text[], size_t amount_of_symbols, FILE *input) {
+    size_t nread = fread(text, sizeof(char), amount_of_symbols, input);
 
-        for (int i = 0; text[n_str][i] != '\n'; ++i) {
-            putc(text[n_str][i], output);
-        }
+    size_t real_amount_of_symbols = nread + 1;
+    text[real_amount_of_symbols - 1] = '\n';
 
-        putc('\n', output);
-    }
-}
-
-size_t elements_in_file(char file_name[]) {
-    struct stat a = {};
-    stat(file_name, &a);
-    return a.st_size;
+    return real_amount_of_symbols;
 }
 
 int count_strings(char text[], size_t amount_of_symbols) {
@@ -90,30 +79,63 @@ int count_strings(char text[], size_t amount_of_symbols) {
     return amount_of_strings;
 }
 
-size_t read_text(char text[], size_t amount_of_symbols, FILE *input) {
-    size_t nread = fread(text, sizeof(char), amount_of_symbols, input);
-
-    size_t real_amount_of_symbols = nread + 1;
-    text[real_amount_of_symbols - 1] = '\n';
-
-    return real_amount_of_symbols;
-}
-
 void place_pointers(struct String strings[], char *text, size_t amount_of_symbols, 
                                                             int amount_of_strings) {
-    strings[0].ptr_to_start = &(text[0]);
+    strings[0].ptr = &(text[0]);
     int nstring = 0;
     size_t nsym = 0;
 
     for (; nstring < amount_of_strings - 1; ++nsym) {
         if (text[nsym] == '\n') {
             ++nstring;
-            strings[nstring].ptr_to_start = &(text[nsym + 1]);
+            strings[nstring].ptr = &(text[nsym + 1]);
 
-            strings[nstring - 1].len_of_str = (int) (strings[nstring - 0].ptr_to_start -
-                                                     strings[nstring - 1].ptr_to_start);
+            strings[nstring - 1].len = (int) (strings[nstring - 0].ptr -
+                                              strings[nstring - 1].ptr);
         }
     }
 
-    strings[amount_of_strings - 1].len_of_str = (int) (amount_of_symbols - nsym);
+    strings[amount_of_strings - 1].len = (int) (amount_of_symbols - nsym);
+}
+
+void write_text_by_strings(FILE *output, struct String strings[], int amount_of_strings) {
+    for (int n_str = 0; n_str < amount_of_strings; ++n_str) {
+        if (*((strings[n_str]).ptr) == '\n') {
+            continue;
+        }
+
+        for (int i = 0; *((strings[n_str]).ptr + i) != '\n'; ++i) {
+            putc(*((strings[n_str]).ptr + i), output);
+        }
+
+        putc('\n', output);
+    }
+}
+
+void write_text_by_chars(FILE *output, char text[], size_t amount_of_symbols) {
+    for (size_t i = 0; i < amount_of_symbols - 1; ++i) {
+        putc(text[i], output);
+    }
+}
+
+size_t elements_in_file(char file_name[]) {
+    struct stat a = {};
+    stat(file_name, &a);
+    return a.st_size;
+}
+
+void print_string(char *string) {
+    for (int i = 0; string[i] != '\n'; ++i) {
+        printf("%c", string[i]);
+    }
+    printf("\n");
+}
+
+void print_strings(void *str, size_t amount_of_strings) {
+    struct String *strings = (struct String*) str;
+    for (size_t i = 0; i < amount_of_strings; ++i) {
+        printf("String number %lld (length %d):", i, (strings[i]).len);
+        print_string((strings[i]).ptr);
+    }
+    printf("All strings printed.\n");
 }
