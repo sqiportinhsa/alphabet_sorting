@@ -18,8 +18,8 @@ int get_file_names(int argc, const char *argv[], char input_file[], char output_
 
     if (argc == 2) {
         if (strlen(argv[1]) > max_len_of_filename) {
-            printf("incorrect input: length of file names should be less than %d", 
-                                                              max_len_of_filename);
+            printf("incorrect input: length of file names should be less than %lld", 
+                                                                max_len_of_filename);
             return -1;
         }
 
@@ -36,8 +36,8 @@ int get_file_names(int argc, const char *argv[], char input_file[], char output_
         if (strlen(argv[1]) > max_len_of_filename || 
             strlen(argv[2]) > max_len_of_filename) {
 
-            printf("incorrect input: length of file names should be less than %d", 
-                                                              max_len_of_filename);
+            printf("incorrect input: length of file names should be less than %lld", 
+                                                                max_len_of_filename);
             return -1;
         }
 
@@ -131,10 +131,9 @@ void print_string(char *string) {
     printf("\n");
 }
 
-void print_strings(void *str, size_t amount_of_strings) {
-    struct String *strings = (struct String*) str;
+void print_strings(struct String *strings, size_t amount_of_strings) {
     for (size_t i = 0; i < amount_of_strings; ++i) {
-        printf("String number %lld (length %d):", i, (strings[i]).len);
+        printf("String number %lld (length %lld):", i, (strings[i]).len);
         print_string((strings[i]).ptr);
     }
     printf("All strings printed.\n");

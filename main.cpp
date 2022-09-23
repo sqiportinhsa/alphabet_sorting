@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sorting.h"
 #include "interface.h"
 #include "common.h"
@@ -24,6 +25,11 @@ int main(int argc, const char **argv) {
 
     FILE *input = fopen(input_name, "r");
 
+    if (input == nullptr) {
+        printf("Error: cannot open input file");
+        return -1;
+    }
+
     amount_of_symbols = read_text(text, amount_of_symbols, input);
     amount_of_strings = count_strings(text, amount_of_symbols);
 
@@ -43,7 +49,7 @@ int main(int argc, const char **argv) {
 
     place_pointers(left__to_rigth_sorted, text, amount_of_symbols, amount_of_strings);
 
-    copy_arr(left__to_rigth_sorted, right_to_left__sorted, amount_of_strings, sizeof(String));
+    memcpy(right_to_left__sorted, left__to_rigth_sorted, amount_of_strings * sizeof(String));
 
     /*for (int i = 0; i < amount_of_strings; ++i) {
         printf("len of string num %d is %d, first element is <%c>\n", i,
@@ -55,6 +61,10 @@ int main(int argc, const char **argv) {
 
     FILE *output = fopen(output_name, "w");
 
+    if (output == nullptr) {
+        printf("Error: cannot open output file");
+    }
+
     fputs("File sorted in alphabet order from left to right:\n\n", output);
     write_text_by_strings(output, left__to_rigth_sorted, amount_of_strings);
 
@@ -62,9 +72,13 @@ int main(int argc, const char **argv) {
     write_text_by_strings(output, right_to_left__sorted, amount_of_strings);
 
     fputs("\n\nOriginal text:\n\n", output);
-    write_text_by_chars(output, text, amount_of_symbols);
+    fwrite(text, sizeof(char), amount_of_symbols - 1, output);
 
     fclose(output);
+
+    free(text);
+    free(left__to_rigth_sorted);
+    free(right_to_left__sorted);
 
     printf("Sorting is done!\nThanks for using this sorter!\n");
 

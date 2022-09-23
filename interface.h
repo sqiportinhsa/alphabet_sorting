@@ -11,4 +11,4 @@ void write_text_by_strings(FILE *output, struct String strings[], int amount_of_
 void write_text_by_chars(FILE *output, char text[], size_t amount_of_symbols);
 size_t elements_in_file(char file_name[]);
 void print_string(char *string);
-void print_strings(void *str, size_t amount_of_strings);
+void print_strings(struct String *str, size_t amount_of_strings);
