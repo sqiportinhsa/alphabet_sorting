@@ -2,8 +2,8 @@
 
 #pragma once
 
-void merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (void *, void *));
-void merge_sort_internal(char *array, char* temp, size_t num_of_elem, 
+int merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (void *, void *));
+void merge_sort_internal(void *array, void *temp, size_t num_of_elem, 
                          size_t el_size, int (*compare) (void *, void *));
 void swap_elements(void *p1, void *p2, size_t size_of_element);
 int compare_strings_ltor(void *ptr_to_struct1, void *ptr_to_struct2);

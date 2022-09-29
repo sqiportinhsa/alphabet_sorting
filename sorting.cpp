@@ -10,18 +10,27 @@
 #include "interface.h"
 
 
-void merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (void *, void *)) {
+int merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (void *, void *)) {
     char *array = (char*) arr;
+
+    if (arr == nullptr) {
+        return -1;
+    }
 
     if (num_of_elem == 1) {
         DEBUG_PRINT("One element sorted\n");
-        return;
+        return 0;
     }
 
     DEBUG_PRINT("Array before sorting:\n");
     DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
 
     char *temp = (char*) calloc(num_of_elem, el_size);
+
+    if (temp == nullptr) {
+        free(temp);
+        return -1;
+    }
 
     merge_sort_internal(array, temp, num_of_elem, el_size, compare);
 
@@ -30,12 +39,20 @@ void merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (v
 
     DEBUG_PRINT("Array after sorting:        ");
     DEBUG_PRINT_STRINGS((String*) arr, num_of_elem);
+
+    return 0;
 }
 
-void merge_sort_internal(char *array, char* temp, size_t num_of_elem, 
+void merge_sort_internal(void *arr, void* tmp, size_t num_of_elem, 
                          size_t el_size, int (*compare) (void *, void *)) {
     DEBUG_PRINT("Array before sorting:\n");
     DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
+
+    char *array = (char*) arr;
+    char *temp  = (char*) tmp;
+
+    assert(array != nullptr);
+    assert(temp != nullptr);
 
     if (num_of_elem == 1) {
         DEBUG_PRINT("One element sorted\n");
@@ -116,12 +133,14 @@ void merge_sort_internal(char *array, char* temp, size_t num_of_elem,
 
     DEBUG_PRINT("Array after sorting:        ");
     DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
-
 }
 
 void swap_elements(void *p1, void *p2, size_t size_of_element) {
     char *ptr1 = (char*) p1;
     char *ptr2 = (char*) p2;
+
+    assert(ptr1 != nullptr);
+    assert(ptr2 != nullptr);
 
     DEBUG_PRINT("Sorting started\n");
 
@@ -234,12 +253,16 @@ int compare_strings_rtol(void *ptr_to_s1, void *ptr_to_s2) {
 }
 
 size_t len_of_str(char *str) {
+    assert(str != nullptr);
     size_t i = 0;
     for (; str[i] != '\n'; ++i);
     return i + 1;
 }
 
 char next_letter_sym(const char str[], size_t* p_to_num_of_sym, size_t len) {
+    assert(str != nullptr);
+    assert(p_to_num_of_sym != nullptr);
+
     char sym = str[*p_to_num_of_sym];
     
     while (isalpha(sym) == 0 && *p_to_num_of_sym < len - 1) {
@@ -251,6 +274,9 @@ char next_letter_sym(const char str[], size_t* p_to_num_of_sym, size_t len) {
 }
 
 char prev_letter_sym(const char str[], size_t* p_to_num_of_sym) {
+    assert(str != nullptr);
+    assert(p_to_num_of_sym != nullptr);
+
     char sym = str[*p_to_num_of_sym];
     
     while (isalpha(sym) == 0 && *p_to_num_of_sym > 0) {

@@ -20,12 +20,14 @@ int main(int argc, const char **argv) {
 
     if (text == nullptr) {
         printf("input error: input file is too large");
+        free(text);
         return -1;
     }
 
     FILE *input = fopen(input_name, "r");
 
     if (input == nullptr) {
+        free(text);
         printf("Error: cannot open input file");
         return -1;
     }
@@ -35,15 +37,14 @@ int main(int argc, const char **argv) {
 
     fclose(input);
 
-    /*for (size_t i = 0; i < amount_of_symbols; ++i) {
-        printf("<%c>", text[i]);
-    }*/
-
     struct String *left__to_rigth_sorted = (struct String*) calloc(amount_of_strings, sizeof(String));
     struct String *right_to_left__sorted = (struct String*) calloc(amount_of_strings, sizeof(String));
 
     if (right_to_left__sorted == nullptr || left__to_rigth_sorted == nullptr) {
-        printf("input error: input file is too large");
+        printf("memory error: can't allocate enougth memory for sorting");
+        free(right_to_left__sorted);
+        free(left__to_rigth_sorted);
+        free(text);
         return -1;
     }
 
@@ -51,18 +52,27 @@ int main(int argc, const char **argv) {
 
     memcpy(right_to_left__sorted, left__to_rigth_sorted, amount_of_strings * sizeof(String));
 
-    /*for (int i = 0; i < amount_of_strings; ++i) {
-        printf("len of string num %d is %d, first element is <%c>\n", i,
-                left__to_rigth_sorted[i].len, *(left__to_rigth_sorted[i].ptr));
-    }*/
+    int err = 0;
 
-    merge_sort(left__to_rigth_sorted, amount_of_strings, sizeof(String), compare_strings_ltor);
-    merge_sort(right_to_left__sorted, amount_of_strings, sizeof(String), compare_strings_rtol);
+    err += merge_sort(left__to_rigth_sorted, amount_of_strings, sizeof(String), compare_strings_ltor);
+    err += merge_sort(right_to_left__sorted, amount_of_strings, sizeof(String), compare_strings_rtol);
+
+    if (err != 0) {
+        printf("memory error: can't allocate enougth memory for sorting");
+        free(right_to_left__sorted);
+        free(left__to_rigth_sorted);
+        free(text);
+        return -1;
+    }
 
     FILE *output = fopen(output_name, "w");
 
     if (output == nullptr) {
         printf("Error: cannot open output file");
+        free(right_to_left__sorted);
+        free(left__to_rigth_sorted);
+        free(text);
+        return -1;
     }
 
     fputs("File sorted in alphabet order from left to right:\n\n", output);
