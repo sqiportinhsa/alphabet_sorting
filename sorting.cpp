@@ -14,101 +14,41 @@ void merge_sort(void *arr, size_t num_of_elem, size_t el_size, int (*compare) (v
     char *array = (char*) arr;
 
     if (num_of_elem == 1) {
-        //printf("One element sorted\n");
+        DEBUG_PRINT("One element sorted\n");
         return;
     }
 
-    //printf("Array before sorting:\n");
-    //print_strings((String*) array, num_of_elem);
+    DEBUG_PRINT("Array before sorting:\n");
+    DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
 
-    size_t num_of_elem_if_sub_1 = num_of_elem / 2;
-    size_t num_of_elem_if_sub_2 = num_of_elem - num_of_elem_if_sub_1;
+    char *temp = (char*) calloc(num_of_elem, el_size);
 
-    char* p_to_sub_1 = array;
-    char* p_to_sub_2 = array + num_of_elem_if_sub_1*el_size;
-
-    char *temp = (char*) calloc((num_of_elem / 2) + 1, el_size);
-
-    merge_sort_internal(p_to_sub_1, temp, num_of_elem_if_sub_1, el_size, compare);
-    merge_sort_internal(p_to_sub_2, temp, num_of_elem_if_sub_2, el_size, compare);
-
-    //printf("Array after sorting subarrays:\n");
-    //print_strings((String*) array, num_of_elem);
-
-    size_t elem_in_sub_1 = 0;
-    size_t elem_in_sub_2 = 0;
-
-    size_t elem_in_temp = 0;
-
-    while (elem_in_sub_1 < num_of_elem_if_sub_1 &&
-           elem_in_sub_2 < num_of_elem_if_sub_2) {
-        //printf("least string in sub1 is string number %lld: ", elem_in_sub_1);
-        //print_string(((String*) (p_to_sub_1 + elem_in_sub_1*el_size))->ptr);
-        //printf("least string in sub2 is string number %lld: ", elem_in_sub_2);
-        //print_string(((String*) (p_to_sub_2 + elem_in_sub_2*el_size))->ptr);
-
-        if (compare((p_to_sub_1 + elem_in_sub_1*el_size),
-                    (p_to_sub_2 + elem_in_sub_2*el_size)) > 0) {
-            //printf("least of them is: ");
-            memcpy(temp + elem_in_temp*el_size, p_to_sub_1 + elem_in_sub_1*el_size, el_size);
-
-            ++elem_in_sub_1;
-            ++elem_in_temp;
-        } else {
-            //printf("least of them is: ");
-            //print_string(((String*) (p_to_sub_2 + elem_in_sub_2*el_size))->ptr);
-            memcpy(temp + elem_in_temp*el_size, p_to_sub_2 + elem_in_sub_2*el_size, el_size);
-
-            ++elem_in_sub_2;
-            ++elem_in_temp;
-        }
-
-        //printf("Array after adding element: ");
-        //print_strings((String*) temp, elem_in_temp);
-    }
-
-    while (elem_in_sub_1 < num_of_elem_if_sub_1) {
-        memcpy(temp + elem_in_temp*el_size, p_to_sub_1 + elem_in_sub_1*el_size, el_size);
-        
-        ++elem_in_sub_1;
-        ++elem_in_temp;
-    }
-
-    while (elem_in_sub_2 < num_of_elem_if_sub_2) {
-        memcpy(temp + elem_in_temp*el_size, p_to_sub_2 + elem_in_sub_2*el_size, el_size);
-
-        ++elem_in_sub_2;
-        ++elem_in_temp;
-    }
-
-    //printf("Sorted array:               ");
-    //print_array(temp, num_of_elem);
-    //printf("//----------------------------------------//\n");
+    merge_sort_internal(array, temp, num_of_elem, el_size, compare);
 
     memcpy(arr, temp, num_of_elem * el_size);
     free(temp);
 
-    //printf("Array after sorting:        ");
-    //print_strings((String*) arr, num_of_elem);
+    DEBUG_PRINT("Array after sorting:        ");
+    DEBUG_PRINT_STRINGS((String*) arr, num_of_elem);
 }
 
 void merge_sort_internal(char *array, char* temp, size_t num_of_elem, 
                          size_t el_size, int (*compare) (void *, void *)) {
-    //printf("Array before sorting:\n");
-    //print_strings((String*) array, num_of_elem);
+    DEBUG_PRINT("Array before sorting:\n");
+    DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
 
     if (num_of_elem == 1) {
-        //printf("One element sorted\n");
+        DEBUG_PRINT("One element sorted\n");
         return;
     }
 
     if (num_of_elem == 2) {
         if (compare(array, (array + el_size)) < 0) {
-            //printf("compatation done sucsessfull");
+            DEBUG_PRINT("compatation done sucsessfull");
             swap_elements(array, (array + el_size), el_size);
         }
-        //printf("Array after  sorting:\n");
-        //print_strings((String*) array, num_of_elem);
+        DEBUG_PRINT("Array after  sorting:\n");
+        DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
         return;
     }
 
@@ -121,8 +61,8 @@ void merge_sort_internal(char *array, char* temp, size_t num_of_elem,
     merge_sort_internal(p_to_sub_1, temp, num_of_elem_if_sub_1, el_size, compare);
     merge_sort_internal(p_to_sub_2, temp, num_of_elem_if_sub_2, el_size, compare);
 
-    //printf("Array after sorting subarrays:\n");
-    //print_strings((String*) array, num_of_elem);
+    DEBUG_PRINT("Array after sorting subarrays:\n");
+    DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
 
     size_t elem_in_sub_1 = 0;
     size_t elem_in_sub_2 = 0;
@@ -131,30 +71,30 @@ void merge_sort_internal(char *array, char* temp, size_t num_of_elem,
 
     while (elem_in_sub_1 < num_of_elem_if_sub_1 &&
            elem_in_sub_2 < num_of_elem_if_sub_2) {
-        //printf("least string in sub1 is string number %lld: ", elem_in_sub_1);
-        //print_string(*(p_to_sub_1 + elem_in_sub_1*el_size));
-        //printf("least string in sub2 is string number %lld: ", elem_in_sub_2);
-        //print_string(*(p_to_sub_2 + elem_in_sub_2*el_size));
+        DEBUG_PRINT("least string in sub1 is string number %lld: ", elem_in_sub_1);
+        DEBUG_PRINT_STRING(((String*)(p_to_sub_1 + elem_in_sub_1*el_size))->ptr);
+        DEBUG_PRINT("least string in sub2 is string number %lld: ", elem_in_sub_2);
+        DEBUG_PRINT_STRING(((String*)(p_to_sub_2 + elem_in_sub_2*el_size))->ptr);
 
         if (compare((p_to_sub_1 + elem_in_sub_1*el_size),
                     (p_to_sub_2 + elem_in_sub_2*el_size)) > 0) {
-            //printf("least of them is: ");
-            //print_string(*(p_to_sub_1 + elem_in_sub_1*el_size));
+            DEBUG_PRINT("least of them is: ");
+            DEBUG_PRINT_STRING(((String*)(p_to_sub_1 + elem_in_sub_1*el_size))->ptr);
             memcpy(temp + elem_in_temp*el_size, p_to_sub_1 + elem_in_sub_1*el_size, el_size);
 
             ++elem_in_sub_1;
             ++elem_in_temp;
         } else {
-            //printf("least of them is: ");
-            //print_string(*(p_to_sub_2 + elem_in_sub_2*el_size));
+            DEBUG_PRINT("least of them is: ");
+            DEBUG_PRINT_STRING(((String*)(p_to_sub_2 + elem_in_sub_2*el_size))->ptr);
             memcpy(temp + elem_in_temp*el_size, p_to_sub_2 + elem_in_sub_2*el_size, el_size);
 
             ++elem_in_sub_2;
             ++elem_in_temp;
         }
 
-        //printf("Array after adding element: ");
-        //print_strings((String*)temp, elem_in_temp + 1);
+        DEBUG_PRINT("\nArray after adding element: \n");
+        DEBUG_PRINT_STRINGS((String*)temp, elem_in_temp);
     }
 
     while (elem_in_sub_1 < num_of_elem_if_sub_1) {
@@ -171,15 +111,11 @@ void merge_sort_internal(char *array, char* temp, size_t num_of_elem,
         ++elem_in_temp;
     }
 
-    //printf("Sorted array:               ");
-    //print_array(temp, num_of_elem);
-    //printf("//----------------------------------------//\n");
-
     memcpy(array, temp, num_of_elem*el_size);
     temp = {};
 
-    //printf("Array after sorting:        ");
-    //print_strings((String*) array, num_of_elem);
+    DEBUG_PRINT("Array after sorting:        ");
+    DEBUG_PRINT_STRINGS((String*) array, num_of_elem);
 
 }
 
@@ -187,7 +123,7 @@ void swap_elements(void *p1, void *p2, size_t size_of_element) {
     char *ptr1 = (char*) p1;
     char *ptr2 = (char*) p2;
 
-    //printf("Sorting started\n");
+    DEBUG_PRINT("Sorting started\n");
 
     char temp = 0;
 
@@ -205,31 +141,31 @@ int compare_strings_ltor(void *ptr_to_struct1, void *ptr_to_struct2) {
     assert(p_to_s1 != nullptr);
     assert(p_to_s2 != nullptr);
 
-    //printf("Compairing strings:\n");
+    DEBUG_PRINT("Compairing strings:\n");
 
-    //print_string(p_to_s1);
-    //print_string(p_to_s2);
+    DEBUG_PRINT_STRING(p_to_s1->ptr);
+    DEBUG_PRINT_STRING(p_to_s2->ptr);
 
     size_t num_of_comp_elem_1 = 0;
     size_t num_of_comp_elem_2 = 0;
 
-    //printf("comparison started\n");
+    DEBUG_PRINT("comparison started\n");
 
     while (num_of_comp_elem_1 < p_to_s1->len && num_of_comp_elem_2 < p_to_s2->len) {
         char elem_of_s1 = next_letter_sym(p_to_s1->ptr, &num_of_comp_elem_1, p_to_s1->len);
         char elem_of_s2 = next_letter_sym(p_to_s2->ptr, &num_of_comp_elem_2, p_to_s2->len);
     
-        //printf("element 1: %c\n", elem_of_s1);
-        //printf("element 2: %c\n", elem_of_s2);
+        DEBUG_PRINT("element 1: %c\n", elem_of_s1);
+        DEBUG_PRINT("element 2: %c\n", elem_of_s2);
 
         int dif = elem_of_s2 - elem_of_s1;
 
         if (dif != 0) {
-            //printf("%d\n", dif);
+            DEBUG_PRINT("%d\n", dif);
             return dif;
         }
 
-        //printf("elements are simular, comparing next:\n");
+        DEBUG_PRINT("elements are simular, comparing next:\n");
 
         ++num_of_comp_elem_1;
         ++num_of_comp_elem_2;
@@ -237,7 +173,7 @@ int compare_strings_ltor(void *ptr_to_struct1, void *ptr_to_struct2) {
 
     size_t len_dif = p_to_s2->len - p_to_s1->len;
 
-    //printf("comp result: %lld", len_dif);
+    DEBUG_PRINT("comp result: %lld", len_dif);
 
     return (int) len_dif;
 }
@@ -249,25 +185,25 @@ int compare_strings_rtol(void *ptr_to_s1, void *ptr_to_s2) {
     assert(p_to_s1 != nullptr);
     assert(p_to_s2 != nullptr);
 
-    //printf("Compairing strings:\n");
+    DEBUG_PRINT("Compairing strings:\n");
 
-    //print_string(*(p_to_s1).ptr);
-    //print_string(*(p_to_s2).ptr);
+    DEBUG_PRINT_STRING(p_to_s1->ptr);
+    DEBUG_PRINT_STRING(p_to_s2->ptr);
 
     size_t num_of_comp_elem_1 = p_to_s1->len - 1;
     size_t num_of_comp_elem_2 = p_to_s2->len - 1;
 
-    //printf("comparison started");
+    DEBUG_PRINT("comparison started");
 
     char elem_of_s1 = prev_letter_sym(p_to_s1->ptr, &num_of_comp_elem_1);
     char elem_of_s2 = prev_letter_sym(p_to_s2->ptr, &num_of_comp_elem_2);
 
-    //printf("element 1 with number %d: %c\n", num_of_comp_elem_1, elem_of_s1);
-    //printf("element 2 with number %d: %c\n", num_of_comp_elem_2, elem_of_s2);
+    DEBUG_PRINT("element 1 with number %lld: %c\n", num_of_comp_elem_1, elem_of_s1);
+    DEBUG_PRINT("element 2 with number %lld: %c\n", num_of_comp_elem_2, elem_of_s2);
 
     int dif = elem_of_s2 - elem_of_s1;
     if (dif != 0) {
-        //printf("\n")
+        DEBUG_PRINT("\n");
         return dif;
     }
 
@@ -278,13 +214,13 @@ int compare_strings_rtol(void *ptr_to_s1, void *ptr_to_s2) {
         elem_of_s1 = prev_letter_sym(p_to_s1->ptr, &num_of_comp_elem_1);
         elem_of_s2 = prev_letter_sym(p_to_s2->ptr, &num_of_comp_elem_2);
 
-        //printf("element 1 with number %d: %c\n", num_of_comp_elem_1, elem_of_s1);
-        //printf("element 2 with number %d: %c\n", num_of_comp_elem_2, elem_of_s2);
+        DEBUG_PRINT("element 1 with number %lld: %c\n", num_of_comp_elem_1, elem_of_s1);
+        DEBUG_PRINT("element 2 with number %lld: %c\n", num_of_comp_elem_2, elem_of_s2);
 
         dif = elem_of_s2 - elem_of_s1;
 
         if (dif != 0) {
-            //printf("\n")
+            DEBUG_PRINT("\n");
             return dif;
         }
 
@@ -292,7 +228,7 @@ int compare_strings_rtol(void *ptr_to_s1, void *ptr_to_s2) {
 
     size_t len_dif = p_to_s2->len - p_to_s1->len;
 
-    //printf("comp result: %lld", len_dif);
+    DEBUG_PRINT("comp result: %lld", len_dif);
 
     return (int) len_dif;
 }
